@@ -33,7 +33,8 @@ class HouseLinksSpiderPipeline(object):
                 print("successfully insert!")
             except pymysql.Error:
                 self.db.rollback()
-                print(f"Wrong Here! With sql: '{self.sql}' item:\ntitle: {item['house_title']}\nlink: {item['house_link']}")
+                print(
+                    f"Wrong Here! With sql: '{self.sql}' item:\ntitle: {item['house_title']}\nlink: {item['house_link']}")
 
         if isinstance(item, PlaceLinkItem):
             self.sql = "INSERT INTO place_links (place_name, place_link) VALUES (%s, %s);"
@@ -46,14 +47,14 @@ class HouseLinksSpiderPipeline(object):
                     f"Wrong Here! With sql: '{self.sql}' item:\ntitle: {item['place_name']}\nlink: {item['place_link']}")
 
         if isinstance(item, PlaceMaxPageItem):
-            self.sql = "INSERT INTO place_links (place_name, place_link) VALUES (%s, %s);"
+            self.sql = "UPDATE place_links SET max_page = %s WHERE place_link = %s;"
             try:
-                self.cursor.execute(self.sql, (item['place_name'], item['place_link']))
+                self.cursor.execute(self.sql, (item['place_maxPage'], item['place_link']))
                 print("successfully insert!")
             except pymysql.Error:
                 self.db.rollback()
                 print(
-                    f"Wrong Here! With sql: '{self.sql}' item:\ntitle: {item['place_name']}\nlink: {item['place_link']}")
+                    f"Wrong Here! With sql: '{self.sql}' item:\nplace_maxPage: {item['place_maxPage']}\nplace_link: {item['place_link']}")
 
         return item
 

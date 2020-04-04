@@ -28,8 +28,8 @@ ROBOTSTXT_OBEY = False
 # See also autothrottle settings and docs
 # DOWNLOAD_DELAY = 0.03
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 16
-CONCURRENT_REQUESTS_PER_IP = 16
+# CONCURRENT_REQUESTS_PER_DOMAIN = 16
+# CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED = False
@@ -56,7 +56,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'houseDataSpider.middlewares.RotateUserAgentMiddleware': 547,
     'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
-    'youx.middlewares.ProxyMiddleWare': 125,
+    'houseDataSpider.middlewares.ProxyMiddleWare': 125,
     'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': None
 }
 

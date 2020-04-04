@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import random
 # Define here the models for your spider middleware
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import time
-from random import random
 
 from fake_useragent import UserAgent
 from scrapy import signals
@@ -132,7 +132,7 @@ class ProxyMiddleWare(object):
         """对request对象加上proxy"""
         proxy = self.get_random_proxy()
         print("this is request ip:" + proxy)
-        request.meta['proxy'] = proxy
+        request.meta['http_proxy'] = proxy
 
     def process_response(self, request, response, spider):
         """对返回的response处理"""
@@ -141,14 +141,14 @@ class ProxyMiddleWare(object):
             proxy = self.get_random_proxy()
             print("this is response ip:" + proxy)
             # 对当前reque加上代理
-            request.meta['proxy'] = proxy
+            request.meta['http_proxy'] = proxy
             return request
         return response
 
     def get_random_proxy(self):
         """随机从文件中读取proxy"""
         while 1:
-            with open('./proxies.txt', 'r') as f:
+            with open('./houseDataSpider/proxies.txt', 'r') as f:
                 proxies = f.readlines()
             if proxies:
                 break

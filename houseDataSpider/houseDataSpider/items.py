@@ -11,6 +11,7 @@ import scrapy
 class HouseLinkItem(scrapy.Item):
     house_title = scrapy.Field()
     house_link = scrapy.Field()
+    house_place_name = scrapy.Field()
 
 
 class PlaceLinkItem(scrapy.Item):
@@ -23,13 +24,10 @@ class PlaceMaxPageItem(scrapy.Item):
     place_maxPage = scrapy.Field()
 
 
-class HousedataspiderItem(scrapy.Item):
+class HouseDataItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    house_id = scrapy.Field()
-    house_condition = scrapy.Field()
     house_title = scrapy.Field()
-    house_location = scrapy.Field()
     house_floor = scrapy.Field()
     house_price = scrapy.Field()
     house_type = scrapy.Field()

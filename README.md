@@ -14,7 +14,7 @@ To deploy the project, you should:
 
 ### Usage
 
-To run the model, you should use the file model.sequence_model.py. 
+To run the model, you should use the file model.train.py. 
 
 Besides, in folder houseDataSpider, there is a web spider built with the scrapy frame.
 

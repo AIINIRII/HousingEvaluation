@@ -17,11 +17,12 @@ def model_build(n):
         tf.keras.layers.Dense(1)
     ])
     model.compile(optimizer=Adam(learning_rate=0.1), loss='mse', metrics=['mae'])
+    # model.compile(optimizer=SGD(learning_rate=0.1, momentum=0.8), loss='mse', metrics=['mae'])
+
     return model
 
 
 def scheduler(epoch):
-    # 每隔100个epoch，学习率减小为原来的1/10
     if epoch % 50 == 0 and epoch != 0:
         lr = tf.keras.backend.get_value(model.optimizer.lr)
         tf.keras.backend.set_value(model.optimizer.lr, lr * 0.8)
@@ -30,14 +31,15 @@ def scheduler(epoch):
 
 
 def load_dataset():
-    X_train_load = np.load('../data/X_train.npy')
-    Y_train_load = np.load('../data/Y_train.npy')
-    X_test_load = np.load('../data/X_test.npy')
-    Y_test_load = np.load('../data/Y_test.npy')
+    X_train_load = np.load('../data/X_train_362.npy')
+    Y_train_load = np.load('../data/Y_train_362.npy')
+    X_test_load = np.load('../data/X_test_362.npy')
+    Y_test_load = np.load('../data/Y_test_362.npy')
     return X_train_load, Y_train_load, X_test_load, Y_test_load
 
 
-def train(model, EPOCHS, X_train, Y_train, X_test, Y_test):
+def train(model, EPOCHS, X_train, Y_train, X_test, Y_test, SEED):
+    tf.random.set_seed(SEED)
     # data normalization
     mean_area = X_train[:, -1].mean(axis=0)
     std_area = X_train[:, -1].std(axis=0)
@@ -52,8 +54,9 @@ def train(model, EPOCHS, X_train, Y_train, X_test, Y_test):
     # training begin
     history = model.fit(X_train, Y_train, epochs=EPOCHS, batch_size=128, validation_split=0.2,
                         verbose=2, callbacks=[reduce_lr])
+    # verbose=2)
     # save the model
-    model.save("model\\model_weight.model", overwrite=True)
+    model.save(".\\model_weight.model", overwrite=True)
     return model, history
 
 
@@ -87,10 +90,11 @@ def plt_history(history):
 
 if __name__ == '__main__':
     # print(f"X's shape: {X.shape}, Y's shape: {Y.shape}")
-    EPOCHS = 200
+    EPOCHS = 300
+    SEED = 2020
     X_train, Y_train, X_test, Y_test = load_dataset()  # load data set
     model = model_build(X_train.shape[1])  # build model
     model.summary()  # print the structure of model
-    model, history = train(model, EPOCHS, X_train, Y_train, X_test, Y_test)
+    model, history = train(model, EPOCHS, X_train, Y_train, X_test, Y_test, SEED)
     evaluate(model, X_train, Y_train, X_test, Y_test)
     plt_history(history)

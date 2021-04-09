@@ -1,8 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+import tensorflow.keras.backend as K
 from tensorflow.keras.callbacks import LearningRateScheduler
+from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
+
+
+def price_accuracy(y_true, y_pred):
+    return 1 - K.mean(K.abs(y_true - y_pred)) / K.mean(y_true)
 
 
 def model_build(n):
@@ -16,7 +22,7 @@ def model_build(n):
         tf.keras.layers.Activation('relu'),
         tf.keras.layers.Dense(1)
     ])
-    model.compile(optimizer=Adam(learning_rate=0.1), loss='mse', metrics=['mae'])
+    model.compile(optimizer=Adam(learning_rate=0.1), loss='mse', metrics=['mae', price_accuracy])
     # model.compile(optimizer=SGD(learning_rate=0.1, momentum=0.8), loss='mse', metrics=['mae'])
 
     return model
@@ -90,7 +96,7 @@ def plt_history(history):
 
 if __name__ == '__main__':
     # print(f"X's shape: {X.shape}, Y's shape: {Y.shape}")
-    EPOCHS = 300
+    EPOCHS = 20
     SEED = 2020
     X_train, Y_train, X_test, Y_test = load_dataset()  # load data set
     model = model_build(X_train.shape[1])  # build model
@@ -98,3 +104,5 @@ if __name__ == '__main__':
     model, history = train(model, EPOCHS, X_train, Y_train, X_test, Y_test, SEED)
     evaluate(model, X_train, Y_train, X_test, Y_test)
     plt_history(history)
+    model2 = load_model(".\\model_weight.model", custom_objects={"price_accuracy": price_accuracy})
+    evaluate(model2, X_train, Y_train, X_test, Y_test)
